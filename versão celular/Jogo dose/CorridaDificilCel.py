@@ -13,7 +13,7 @@ def main():
 
     # Inicialize a tela
     SCREEN_WIDTH = 1600
-    SCREEN_HEIGHT = 720
+    SCREEN_HEIGHT = 1000
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Corrida de Cavalos")
 
@@ -169,6 +169,10 @@ def main():
     def desenhar_tela():
         screen.fill(WHITE)
 
+        # Adicione a moldura ao redor da tela
+        frame_rect = pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+        pygame.draw.rect(screen, BLACK, frame_rect, 20)  # O último argumento (5) define a espessura da moldura
+
         if not corrida_terminou:
             # Desenhe os cavalos
             desenhar_cavalos()
@@ -188,13 +192,13 @@ def main():
 
     # Função para desenhar os cavalos
     def desenhar_cavalos():
-        font = pygame.font.Font(None, 36)
+        font = pygame.font.Font(None, 60)
         cavalos_disponiveis = [cavalo for cavalo in cavalos.keys() if cavalo not in ordem_chegada]
         for i, cavalo in enumerate(cavalos_disponiveis):
-            retangulo = pygame.Rect(100, 100 + i * 120, 100 + posicao_atual[cavalo] * 80, 80)
+            retangulo = pygame.Rect(100, 100 + i * 220, 100 + posicao_atual[cavalo] * 80, 150)
             pygame.draw.rect(screen, RED, retangulo)
             numero_text = font.render(str(cavalo), True, BLACK)
-            numero_text_rect = numero_text.get_rect(center=(retangulo.centerx, retangulo.centery - 60))
+            numero_text_rect = numero_text.get_rect(center=(retangulo.centerx, retangulo.centery - 100))
             screen.blit(numero_text, numero_text_rect)
             classificacao_posicao_text = font.render(f"({len(ordem_chegada) + 1}/{posicao_atual[cavalo]})", True, BLACK)
             classificacao_posicao_text_rect = classificacao_posicao_text.get_rect(center=(retangulo.centerx, retangulo.centery))
@@ -203,7 +207,7 @@ def main():
     # Função para desenhar o botão "Dado"
     def desenhar_botao():
         font = pygame.font.Font(None, 36)
-        botao_rect = pygame.draw.rect(screen, RED, (SCREEN_WIDTH // 2 - 100, 500, 200, 80))
+        botao_rect = pygame.draw.rect(screen, RED, (SCREEN_WIDTH // 1 - 400, 550, 300, 100))
         text = font.render("Dado", True, WHITE)
         text_rect = text.get_rect(center=botao_rect.center)
         screen.blit(text, text_rect)
@@ -217,7 +221,7 @@ def main():
     # Função para desenhar o botão "Apostas"
     def desenhar_botao_apostas():
         font = pygame.font.Font(None, 36)
-        botao_rect = pygame.draw.rect(screen, RED, (SCREEN_WIDTH // 2 - 100, 600, 200, 80))
+        botao_rect = pygame.draw.rect(screen, RED, (SCREEN_WIDTH // 1 - 400, 700, 300, 100))
         text = font.render("Apostas", True, WHITE)
         text_rect = text.get_rect(center=botao_rect.center)
         screen.blit(text, text_rect)
@@ -366,12 +370,12 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN and not corrida_terminou:
-                if SCREEN_WIDTH // 2 - 100 <= event.pos[0] <= SCREEN_WIDTH // 2 + 100:
-                    if 500 <= event.pos[1] <= 580:
+                if SCREEN_WIDTH // 1 - 400 <= event.pos[0] <= SCREEN_WIDTH // 1 + 400:
+                    if 550 <= event.pos[1] <= 630:
                         if apostas_encerradas:
                             processar_lancamento_dados(doses_cavalos)
                             desenhar_tela()
-                    elif 600 <= event.pos[1] <= 680 and not apostas_encerradas and not tela_apostas_ativa:
+                    elif 700 <= event.pos[1] <= 780 and not apostas_encerradas and not tela_apostas_ativa:
                         tela_apostas_ativa = True
             elif event.type == pygame.MOUSEBUTTONDOWN and corrida_terminou:
                 if SCREEN_WIDTH // 2 - 100 <= event.pos[0] <= SCREEN_WIDTH // 2 + 100 and 500 <= event.pos[1] <= 580:
